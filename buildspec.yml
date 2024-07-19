@@ -1,0 +1,24 @@
+version: 0.2
+
+env:  
+  variables:
+    DOCKER_BUILDKIT: "1"
+
+phases:
+  install:
+    runtime-versions:
+      php: 8.3
+
+  build:
+    commands:
+      - cat .env.example | sed
+        -e "s/#DB_HOST#/${DB_HOST}/"
+        -e "s/#DB_DATABASE#/${DB_DATABASE}/"
+        -e "s/#DB_USERNAME#/${DB_USERNAME}/"
+        -e "s/#DB_PASSWORD#/${DB_PASSWORD}/" > .env
+      - composer install
+      - php artisan key:generate
+
+artifacts:
+  files:
+    - '**/*'
